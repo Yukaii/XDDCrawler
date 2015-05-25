@@ -7,6 +7,8 @@ module XDDCrawler
     attr_reader :current_url
 
     def initialize opts = {}
+      opts = Hash[opts.map{ |k, v| [k.to_sym, v] }]
+      @encoding = opts.fetch(:encoding, 'utf-8')
     end
 
     def visit url
@@ -46,7 +48,7 @@ module XDDCrawler
 
     private
       def handle_response response
-        @doc = Nokogiri::HTML response.force_encoding('utf-8')
+        @doc = Nokogiri::HTML response.force_encoding(@encoding)
         @cookies ||= response.cookies
       end
   end
